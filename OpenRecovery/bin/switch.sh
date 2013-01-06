@@ -15,7 +15,7 @@ export PATH="$PATH:/bin:/sbin"
 #===============================================================================
 
 INSTALL_COMMAND=0
-EMMC=0
+EMMC=1
 ROOT="/"
 
 #post-installation
@@ -128,6 +128,10 @@ chmod 0755 ${ROOT}sbin/tune2fs
 cp -f /sdcard/OpenRecovery/sbin/parted ${ROOT}sbin/parted
 chmod 0755 ${ROOT}sbin/parted
 
+cp -f /sdcard/OpenRecovery/sbin/fsck_msdos-or ${ROOT}sbin/fsck_msdos-or
+chmod 0755 ${ROOT}sbin/fsck_msdos-or
+ln -s ${ROOT}sbin/fsck_msdos-or ${ROOT}sbin/fsck_msdos
+chmod 0755 fsck_msdos
 cp -f /sdcard/OpenRecovery/sbin/erase_image-or ${ROOT}sbin/erase_image-or
 chmod 0755 ${ROOT}sbin/erase_image-or
 ln -s /sbin/erase_image-or ${ROOT}sbin/erase_image
@@ -180,6 +184,7 @@ chmod -R 0644 ${ROOT}lib
 #ext2/3/4 partition on sdcard
 if [ -b /dev/block/mmcblk0p2 ]; then
 	mkdir /sddata
+	chmod 0755 /sddata
 	insmod "/sdcard/OpenRecovery/lib/modules/jbd2.ko"
 	insmod "/sdcard/OpenRecovery/lib/modules/ext4.ko"
 	echo "/dev/block/mmcblk0p2          /sddata         auto            defaults        0 0" >> /etc/fstab
@@ -224,8 +229,6 @@ cp -fR /sdcard/OpenRecovery/tags/ $ROOT
 #Launch Open Recovery
 #==============================================================================
 
-#rm /cache/recovery/command
-rm /cache/OpenRecovery/sbin/recovery
 
 cp -f "/sdcard/OpenRecovery/sbin/open_rcvr."$1 ${ROOT}sbin/recovery
 chmod 0755 ${ROOT}sbin/recovery
