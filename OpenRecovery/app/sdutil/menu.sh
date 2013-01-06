@@ -47,7 +47,7 @@ fi
 echo "保存诊断数据到/sdcard/sdcard-info.txt:shell:/app/sdutil/diagnostics.sh" >> "$MENU_FILE"
 
 echo "*:break:*" >> "$MENU_FILE"
-echo "              分区   可引导   Id 文件系统:label:*" >> "$MENU_FILE"
+echo "              分区 引导   Id 文件系统:label:*" >> "$MENU_FILE"
 echo "*:break:*" >> "$MENU_FILE"
 fdisk -l /dev/block/mmcblk0 | grep ^/dev/ | cut -c 1-28,63- | while read part
 do

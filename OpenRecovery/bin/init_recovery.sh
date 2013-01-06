@@ -90,7 +90,6 @@ KERNEL_VERSION=`uname -r`
 
 echo "主菜单" > "$MAIN_MENU_FILE"
 echo "内核版本 ${KERNEL_VERSION}" > "$MAIN_MENU_FILE"
-echo "*:break:*" >> "$MAIN_MENU_FILE"
 echo "重新启动:reboot:*" >> "$MAIN_MENU_FILE"
 echo "重启模式:scripted_menu:reboot.menu:menu_reboot.sh" >> "$MAIN_MENU_FILE"
 

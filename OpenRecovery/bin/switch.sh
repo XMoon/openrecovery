@@ -112,15 +112,11 @@ cp -f /sdcard/OpenRecovery/sbin/sshot ${ROOT}sbin/sshot
 chmod 0755 ${ROOT}sbin/sshot
 
 #Nandroid
-cp -f /sdcard/OpenRecovery/sbin/dump_image-or ${ROOT}sbin/dump_image-or
-chmod 0755 ${ROOT}sbin/dump_image-or
-ln -s /sbin/dump_image-or ${ROOT}sbin/dump_image
-chmod 0755 dump_image
+cp -f /sdcard/OpenRecovery/sbin/dump_image ${ROOT}sbin/dump_image
+chmod 0755 ${ROOT}sbin/dump_image
 
-cp -f /sdcard/OpenRecovery/sbin/e2fsck-or ${ROOT}sbin/e2fsck-or
-chmod 0755 ${ROOT}sbin/e2fsck-or
-ln -s /sbin/e2fsck-or ${ROOT}sbin/e2fsck
-chmod 0755 e2fsck
+cp -f /sdcard/OpenRecovery/sbin/e2fsck ${ROOT}sbin/e2fsck
+chmod 0755 ${ROOT}sbin/e2fsck
 
 cp -f /sdcard/OpenRecovery/sbin/tune2fs ${ROOT}sbin/tune2fs
 chmod 0755 ${ROOT}sbin/tune2fs
@@ -128,29 +124,19 @@ chmod 0755 ${ROOT}sbin/tune2fs
 cp -f /sdcard/OpenRecovery/sbin/parted ${ROOT}sbin/parted
 chmod 0755 ${ROOT}sbin/parted
 
-cp -f /sdcard/OpenRecovery/sbin/fsck_msdos-or ${ROOT}sbin/fsck_msdos-or
-chmod 0755 ${ROOT}sbin/fsck_msdos-or
-ln -s ${ROOT}sbin/fsck_msdos-or ${ROOT}sbin/fsck_msdos
-chmod 0755 fsck_msdos
-cp -f /sdcard/OpenRecovery/sbin/erase_image-or ${ROOT}sbin/erase_image-or
-chmod 0755 ${ROOT}sbin/erase_image-or
-ln -s /sbin/erase_image-or ${ROOT}sbin/erase_image
-chmod 0755 erase_image
+cp -f /sdcard/OpenRecovery/sbin/fsck_msdos ${ROOT}sbin/fsck_msdos
+chmod 0755 ${ROOT}sbin/fsck_msdos
+cp -f /sdcard/OpenRecovery/sbin/erase_image ${ROOT}sbin/erase_image
+chmod 0755 ${ROOT}sbin/erase_image
 
-cp -f /sdcard/OpenRecovery/sbin/flash_image-or ${ROOT}sbin/flash_image-or
-chmod 0755 ${ROOT}sbin/flash_image-or
-ln -s /sbin/flash_image-or ${ROOT}sbin/flash_image
-chmod 0755 flash_image
+cp -f /sdcard/OpenRecovery/sbin/flash_image ${ROOT}sbin/flash_image
+chmod 0755 ${ROOT}sbin/flash_image
 
-cp -f /sdcard/OpenRecovery/sbin/mkyaffs2image-or ${ROOT}sbin/mkyaffs2image-or
-chmod 0755 ${ROOT}sbin/mkyaffs2image-or
-ln -s /sbin/mkyaffs2image-or ${ROOT}sbin/mkyaffs2image
-chmod 0755 mkyaffs2image
+cp -f /sdcard/OpenRecovery/sbin/mkyaffs2image ${ROOT}sbin/mkyaffs2image
+chmod 0755 ${ROOT}sbin/mkyaffs2image
 
-cp -f /sdcard/OpenRecovery/sbin/unyaffs-or ${ROOT}sbin/unyaffs-or
-chmod 0755 ${ROOT}sbin/unyaffs-or
-ln -s /sbin/unyaffs-or ${ROOT}sbin/unyaffs
-chmod 0755 unyaffs
+cp -f /sdcard/OpenRecovery/sbin/unyaffs ${ROOT}sbin/unyaffs
+chmod 0755 ${ROOT}sbin/unyaffs
 
 #Updater
 cp -f /sdcard/OpenRecovery/sbin/updater-or ${ROOT}sbin/updater-or
@@ -185,10 +171,12 @@ chmod -R 0644 ${ROOT}lib
 if [ -b /dev/block/mmcblk0p2 ]; then
 	mkdir /sddata
 	chmod 0755 /sddata
+	ln -s /sddata /sd-ext
 	insmod "/sdcard/OpenRecovery/lib/modules/jbd2.ko"
 	insmod "/sdcard/OpenRecovery/lib/modules/ext4.ko"
 	echo "/dev/block/mmcblk0p2          /sddata         auto            defaults        0 0" >> /etc/fstab
-	e2fsck -p /dev/block/mmcblk0p2 
+	e2fsck -p /dev/block/mmcblk0p2
+	mount /sddata
 fi
 
 #res - read the theme first
