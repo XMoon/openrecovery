@@ -31,7 +31,7 @@ fi
 
 export APP_MENU_FILE="/menu/app.menu"
 
-echo "其他工具" > "$APP_MENU_FILE"
+echo "附加功能" > "$APP_MENU_FILE"
 echo "返回:menu:.." >> "$APP_MENU_FILE"
 
 echo "*:break:*" >> "$APP_MENU_FILE"

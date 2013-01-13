@@ -45,7 +45,7 @@ for image in system data cache cdrom boot lbl logo ext2; do
 				echo "标志(Logo):tag:nand_rest_logo" >> "$MENU_FILE"
 			;;
     ext2)
-				echo "SD 卡分区(ext2):tag:nand_rest_ext2" >> "$MENU_FILE"
+				echo "SD 卡分区(ext):tag:nand_rest_ext2" >> "$MENU_FILE"
 			;;
   esac
   

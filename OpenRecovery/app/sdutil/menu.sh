@@ -1,10 +1,10 @@
 #!/sbin/sh
 
-echo "SD卡工具" > "$MENU_FILE"
+echo "SD 卡工具" > "$MENU_FILE"
 echo "返回:menu:.." >> "$MENU_FILE"
-echo "扫描FAT分区错误:shell:/app/sdutil/fsck_msdos.sh" >> "$MENU_FILE" 
+echo "扫描 FAT 分区错误:shell:/app/sdutil/fsck_msdos.sh" >> "$MENU_FILE" 
 if [ -b /dev/block/mmcblk0p2 ] ; then
-    echo "扫描EXT分区错误:shell:/app/sdutil/fsck_ext.sh" >> "$MENU_FILE" 
+    echo "扫描 EXT 分区错误:shell:/app/sdutil/fsck_ext.sh" >> "$MENU_FILE" 
 fi
 
 # if [ -f /system/etc/sdext/app2ext ]; then
@@ -35,16 +35,16 @@ if [ ! -z "$feat" ] ; then
     fi
     case $ext in
 	ext2)
-	    echo "转换ext2到ext3:shell:/app/sdutil/convert3.sh" >> "$MENU_FILE" 
-	    echo "转换ext2到ext4:shell:/app/sdutil/convert4.sh" >> "$MENU_FILE" 
+	    echo "转换 EXT2 分区为 EXT3 分区:shell:/app/sdutil/convert3.sh" >> "$MENU_FILE" 
+	    echo "转换 EXT2 分区为 EXT4 分区:shell:/app/sdutil/convert4.sh" >> "$MENU_FILE" 
 	    ;;
 	ext3)
-	    echo "转换ext3到ext4:shell:/app/sdutil/convert4.sh" >> "$MENU_FILE" 
+	    echo "转换 EXT3 分区为 EXT4 分区:shell:/app/sdutil/convert4.sh" >> "$MENU_FILE" 
 	    ;;
     esac
 fi
 
-echo "保存诊断数据到/sdcard/sdcard-info.txt:shell:/app/sdutil/diagnostics.sh" >> "$MENU_FILE"
+echo "保存诊断数据到 /sdcard/sdcard-info.txt:shell:/app/sdutil/diagnostics.sh" >> "$MENU_FILE"
 
 echo "*:break:*" >> "$MENU_FILE"
 echo "                 分区 引导  Id 文件系统:label:*" >> "$MENU_FILE"
@@ -55,6 +55,6 @@ do
 done
 echo "*:break:*" >> "$MENU_FILE"
 if [ ! -z "$ext" ] ; then
-    echo "Ext分区是$ext:label:*" >> "$MENU_FILE"
+    echo "EXT 分区是$ext:label:*" >> "$MENU_FILE"
 fi
 

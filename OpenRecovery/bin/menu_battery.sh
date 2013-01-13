@@ -4,13 +4,13 @@ CAP=`cat /sys/class/power_supply/battery/charge_counter`
 STATUS=`cat /sys/class/power_supply/battery/status`
 #Chinese translation
 if [ "$STATUS" == "Charging" ]; then
-	STATU=充电中
+	STATU=正在充电
 fi
 if [ "$STATUS" == "Unknown" ]; then
-	STATU=未知
+	STATU=未知状态
 fi
 if [ "$STATUS" == "Discharging" ]; then
-	STATU=放电中
+	STATU=正在使用
 fi
 if [ "$STATUS" == "Not charging" ]; then
 	STATU=未充电
