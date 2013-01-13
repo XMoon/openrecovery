@@ -27,7 +27,7 @@ FREEBLOCKS="`df -k /sdcard| grep sdcard | awk '{ print $4 }'`"
 
 echo "+------------------------------------------+"
 echo "+                                          +"
-echo "+               备 份 模 式                    +"
+echo "+               备 份 模 式                 +"
 echo "+                                          +"
 echo "+------------------------------------------+"
 sleep 2
