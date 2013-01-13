@@ -17,7 +17,7 @@ echo "分区:break:*" >> "$MENU_FILE"
 CWD=$PWD
 cd "$1"
 
-for image in system data cache cdrom boot lbl logo ext2; do
+for image in system data cache cdrom boot lbl logo ext; do
 	if [ `ls $image* 2>/dev/null | wc -l` == 0 ]; then
   	continue
   fi
@@ -44,7 +44,7 @@ for image in system data cache cdrom boot lbl logo ext2; do
     logo)
 				echo "标志(Logo):tag:nand_rest_logo" >> "$MENU_FILE"
 			;;
-    ext2)
+    ext)
 				echo "SD 卡分区(ext):tag:nand_rest_ext2" >> "$MENU_FILE"
 			;;
   esac
