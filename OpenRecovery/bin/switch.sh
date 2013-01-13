@@ -172,8 +172,8 @@ if [ -b /dev/block/mmcblk0p2 ]; then
 	mkdir /sddata
 	chmod 0755 /sddata
 	ln -s /sddata /sd-ext
-	insmod "/sdcard/OpenRecovery/lib/modules/jbd2.ko"
-	insmod "/sdcard/OpenRecovery/lib/modules/ext4.ko"
+	insmod "${ROOT}lib/modules/jbd2.ko"
+	insmod "${ROOT}lib/modules/ext4.ko"
 	echo "/dev/block/mmcblk0p2          /sddata         auto            defaults        0 0" >> /etc/fstab
 	e2fsck -p /dev/block/mmcblk0p2
 	mount /sddata
