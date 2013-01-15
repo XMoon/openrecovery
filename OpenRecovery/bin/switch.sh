@@ -15,7 +15,6 @@ export PATH="$PATH:/bin:/sbin"
 #===============================================================================
 
 INSTALL_COMMAND=0
-EMMC=1
 ROOT="/"
 
 #post-installation
@@ -115,6 +114,9 @@ chmod 0755 dump_image
 
 cp -f /sdcard/OpenRecovery/sbin/e2fsck ${ROOT}sbin/e2fsck
 chmod 0755 ${ROOT}sbin/e2fsck
+
+cp -f /sdcard/OpenRecovery/sbin/fsck_msdos ${ROOT}sbin/fsck_msdos
+chmod 0755 ${ROOT}sbin/fsck_msdos
 
 cp -f /sdcard/OpenRecovery/sbin/tune2fs ${ROOT}sbin/tune2fs
 chmod 0755 ${ROOT}sbin/tune2fs
