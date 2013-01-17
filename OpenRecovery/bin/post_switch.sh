@@ -1,8 +1,5 @@
 #!/sbin/bash
 
-
-
-
 #set display brightness
 if [ -f /sdcard/OpenRecovery/etc/brightness ] ; then
     cat /sdcard/OpenRecovery/etc/brightness > /sys/class/leds/lcd-backlight/brightness
