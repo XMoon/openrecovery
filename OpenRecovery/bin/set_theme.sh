@@ -11,5 +11,5 @@ if [ -d /sdcard/OpenRecovery/$1 ]; then
 fi
 
 RPID=`ps | grep /sbin/recovery | awk '{print $1}'`
-echo "结束进程 $RPID..."
+echo "kill process $RPID..."
 kill -9 $RPID

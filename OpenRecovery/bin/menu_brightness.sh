@@ -1,7 +1,7 @@
 #!/sbin/bash
 
-echo "设置显示亮度" > "$MENU_FILE"
-echo "返回:menu:.." >> "$MENU_FILE"
+echo "Set Display Brightness" > "$MENU_FILE"
+echo "Go Back:menu:.." >> "$MENU_FILE"
 echo "*:break:*" >> "$MENU_FILE"
 echo "100%:shell:brightness.sh 255" >> "$MENU_FILE"
 echo " 75%:shell:brightness.sh 192" >> "$MENU_FILE"

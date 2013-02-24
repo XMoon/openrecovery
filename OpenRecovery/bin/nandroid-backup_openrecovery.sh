@@ -25,11 +25,11 @@ BACKUPPREFIX="OR-"
 #amount of space remaining
 FREEBLOCKS="`df -k /sdcard| grep sdcard | awk '{ print $4 }'`"
 
-echo "+------------------------------------------+"
-echo "+                                          +"
-echo "                备 份 模 式                 "
-echo "+                                          +"
-echo "+------------------------------------------+"
+echo "+----------------------------------------------+"
+echo "+                                              +"
+echo "        Open Recovery Nandroid Backup         "
+echo "+                                              +"
+echo "+----------------------------------------------+"
 sleep 2
 
 #===============================================================================
@@ -98,7 +98,7 @@ else
 fi
 
 if [ $NOTHING -eq 1 ]; then
-	echo "E: 未执行任何操作"
+	echo "E:There is nothing to back up."
 	exit 1
 fi
 
@@ -111,7 +111,7 @@ mkyaffs2image=`which mkyaffs2image`
 if [ "$mkyaffs2image" == "" ]; then
 	mkyaffs2image=`which mkyaffs2image-or`
 	if [ "$mkyaffs2image" == "" ]; then
-		echo "E: 未找到 mkyaffs2image 或 mkyaffs2image-or."
+		echo "E:mkyaffs2image or mkyaffs2image-or not found in path."
 		exit 1
 	fi
 fi
@@ -120,7 +120,7 @@ dump_image=`which dump_image`
 if [ "$dump_image" == "" ]; then
 	dump_image=`which dump_image-or`
 	if [ "$dump_image" == "" ]; then
-		echo "E: 未找到 dump_image 或 dump_image-or."
+		echo "E:dump_image or dump_image-or not found in path."
 		exit 1
 	fi
 fi
@@ -133,7 +133,7 @@ if [ "$COMPRESS" == 1 ]; then
 		ENERGY=100
 	fi
 	if [ ! $ENERGY -ge 30 ]; then
-		echo "E: 电量不足"      
+		echo "E:Not enough battery power to perform compression."      
 		exit 1
 	fi
 fi
@@ -144,11 +144,11 @@ fi
 
 #require at least 400 MiB to proceed
 if [ $FREEBLOCKS -le 409600 ]; then
-	echo "E: 存储空间不足"
-	echo "  请确认 SD 卡上至少有 400MB 或更大的空间."
+	echo "E:Not enough free space available on sdcard for backing up."
+	echo "Requires 400 MiB to proceed."
 	exit 1
 else
-	echo "  请确认 SD 卡上至少有 400MB 或更大的空间."
+	echo "There is at least 400 MiB on the sdcard."
 fi
 
 #build the prefix and check if the filesystem partitions are properly mounteable
@@ -228,12 +228,12 @@ DESTDIR="$BACKUPPATH/$BACKUPPREFIX$BACKUPLEGEND$TIMESTAMP"
 if [ ! -d $DESTDIR ]; then 
 	mkdir -p $DESTDIR
 	if [ ! -d $DESTDIR ]; then 
-		echo "E: 无法创建$DESTDIR ."
+		echo "E:Cannot create $DESTDIR ."
 		exit 1
 	fi
 fi
 
-echo "备份至:"
+echo "Backup directory:"
 echo "$DESTDIR"
 
 CWD=$PWD
@@ -247,21 +247,21 @@ for image in boot lbl logo; do
 	case $image in
 		boot)
 			if [ $BKP_BOOT -eq 0 ]; then
-				echo "内核(boot): 已跳过."
+				echo "boot: Skipping."
 				continue
 			fi
 			;;
 			
 		lbl)
 			if [ $BKP_LBL -eq 0 ]; then
-				echo "引导(bootloader): 已跳过."
+				echo "lbl: Skipping."
 				continue
 			fi
 			;;
 			
 		logo)
 			if [ $BKP_LOGO -eq 0 ]; then
-				echo "标志(logo): 已跳过."
+				echo "logo: Skipping."
 				continue
 			fi
 			;;
@@ -271,7 +271,7 @@ for image in boot lbl logo; do
 	DEVICEMD5=`$dump_image $image - | md5sum | awk '{ print $1 }'`
 	sleep 1s
 	MD5RESULT=1
-	echo -n "${image}: 正在备份..."
+	echo -n "${image}: Dumping..."
 	ATTEMPT=0
 	
 	while [ $MD5RESULT -eq 1 ]; do
@@ -287,17 +287,17 @@ for image in boot lbl logo; do
 		
 		if [ "$ATTEMPT" == "5" ]; then
 			echo "failed"
-			echo "E: 备份 $image 时发生严重错误, 已终止."
+			echo "E:Fatal error while trying to dump $image, aborting."
 			exit 1
 		fi
 	done
 	
-	echo "完成"
+	echo "done"
 	
 	#generate the md5 sum
-	echo -n "${image}: 正在创建校验文件..."
+	echo -n "${image}: Generating MD5..."
 	md5sum $image.img > $image.md5
-	echo "完成"
+	echo "done"
 	
 done
 
@@ -309,42 +309,42 @@ for image in system data cache cdrom; do
 	case $image in
 		system)
 			if [ $BKP_SYSTEM -eq 0 ]; then
-				echo "系统(system): 已跳过."
+				echo "system: Skipping."
 				continue
 			fi
 			;;
 		  
 		data)
 			if [ $BKP_DATA -eq 0 ]; then
-				echo "数据(data): 已跳过."
+				echo "data: Skipping."
 				continue
 			fi
 			;;
 		  
 		cache)
 			if [ $BKP_CACHE -eq 0 ]; then
-				echo "缓存(cache): 已跳过."
+				echo "cache: Skipping."
 				continue
 			fi
 			;;
 		
 		cdrom)
 			if [ $BKP_CDROM -eq 0 ]; then
-				echo "CD-Rom: 已跳过."
+				echo "cdrom: Skipping."
 				continue
 			fi
 			;;    
 	esac
 	
-	echo -n "${image}: 正在备份..."
+	echo -n "${image}: Dumping..."
 	$mkyaffs2image /$image $DESTDIR/$image.img > /dev/null 2> /dev/null
 	sync
-	echo "完成"
+	echo "done"
 	
 	#generate the md5 sum
-	echo -n "${image}: 正在创建校验文件..."
+	echo -n "${image}: Generating MD5..."
 	md5sum $image.img > $image.md5
-	echo "完成"
+	echo "done"
 	
 done
 
@@ -353,24 +353,24 @@ done
 #===============================================================================
 
 if [ $BKP_EXT2 -eq 1 ]; then
-	echo -n "ext: 正在检查..."
+	echo -n "ext: Checking..."
 	umount /sddata 2> /dev/null
 	e2fsck -fp /dev/block/mmcblk0p2 > /dev/null
-	echo "完成"
+	echo "done"
 	mount /sddata
-	echo -n "ext: 正在备份..."
+	echo -n "ext: Dumping..."
 	CW2=$PWD
 	cd /sddata
 	tar -cvf $DESTDIR/ext.tar ./ > /dev/null
 	cd $CW2
-	echo "完成"
+	echo "done"
 	
 	#generate the md5 sum
-	echo -n "ext: 正在创建校验文件..."
+	echo -n "ext: Generating MD5..."
 	md5sum ext.tar > ext.md5
-	echo "完成"
+	echo "done"
 else
-	echo "SD 卡分区(ext): 已跳过."
+	echo "ext: Skipping."
 fi
 
 
@@ -381,17 +381,17 @@ fi
 if [ $COMPRESS -eq 1 ]; then
 	# we need about 70MiB for the intermediate storage needs
 	if [ $FREEBLOCKS -le 71680 ]; then
-		echo "E: 没有足够的空间来压缩备份文件(至少需要 70MB)"
-		echo "备份文件未压缩"
+		echo "E:Not enough free space available on sdcard for compression operation (need 70 MiB)."
+		echo "Leaving this backup uncompressed."
 		exit 1
 	else
-		echo -n "正在压缩备份文件，请稍等..."
+		echo -n "Compressing the backup, may take a bit of time, please wait..."
 		# we are already in $DESTDIR, start compression from the smallest files
 		# to maximize space for the largest's compression, less likely to fail.
 		# To decompress reverse the order.
 		bzip2 -6 `ls -S -r *.img` > /dev/null
 		bzip2 -6 `ls -S -r *.tar` > /dev/null
-		echo "完成"
+		echo "done"
 	fi
 fi
 
@@ -400,7 +400,7 @@ fi
 #===============================================================================
 
 cd $CWD
-echo "备份完成"
+echo "Backing up finished."
 
 if [ $REBOOT -eq 1 ]; then
 	reboot

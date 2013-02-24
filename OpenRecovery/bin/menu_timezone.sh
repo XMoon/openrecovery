@@ -1,7 +1,7 @@
 #!/sbin/bash
 
-echo "设定时区" > "$MENU_FILE"
-echo "返回:menu:.." >> "$MENU_FILE"
+echo "Set Timezone" > "$MENU_FILE"
+echo "Go Back:menu:.." >> "$MENU_FILE"
 echo "*:break:*" >> "$MENU_FILE"
 echo "GMT -12:shell:timezone.sh GMT+12" >> "$MENU_FILE"
 echo "GMT -11:shell:timezone.sh GMT+11" >> "$MENU_FILE"

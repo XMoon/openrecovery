@@ -3,8 +3,8 @@
 UPDATES_DIR=/sdcard/OpenRecovery/updates
 
 #recreate the file
-echo "安装升级包" > "$MENU_FILE"
-echo "返回:menu:.." >> "$MENU_FILE"
+echo "Apply Update" > "$MENU_FILE"
+echo "Go Back:menu:.." >> "$MENU_FILE"
 
 if [ -d $UPDATES_DIR ]
 then

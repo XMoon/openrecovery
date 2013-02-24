@@ -1,10 +1,10 @@
 #!/sbin/sh
 
-echo "SD 卡工具" > "$MENU_FILE"
-echo "返回:menu:.." >> "$MENU_FILE"
-echo "扫描 FAT 分区错误:shell:/app/sdutil/fsck_msdos.sh" >> "$MENU_FILE" 
+echo "SD Card Utilities" > "$MENU_FILE"
+echo "Go Back:menu:.." >> "$MENU_FILE"
+echo "Scan FAT partition for errors:shell:/app/sdutil/fsck_msdos.sh" >> "$MENU_FILE" 
 if [ -b /dev/block/mmcblk0p2 ] ; then
-    echo "扫描 EXT 分区错误:shell:/app/sdutil/fsck_ext.sh" >> "$MENU_FILE" 
+    echo "Scan ext partition for errors:shell:/app/sdutil/fsck_ext.sh" >> "$MENU_FILE" 
 fi
 
 # if [ -f /system/etc/sdext/app2ext ]; then
@@ -35,19 +35,19 @@ if [ ! -z "$feat" ] ; then
     fi
     case $ext in
 	ext2)
-	    echo "转换 EXT2 分区为 EXT3 分区:shell:/app/sdutil/convert3.sh" >> "$MENU_FILE" 
-	    echo "转换 EXT2 分区为 EXT4 分区:shell:/app/sdutil/convert4.sh" >> "$MENU_FILE" 
+	    echo "Convert ext2 to ext3:shell:/app/sdutil/convert3.sh" >> "$MENU_FILE" 
+	    echo "Convert ext2 to ext4:shell:/app/sdutil/convert4.sh" >> "$MENU_FILE" 
 	    ;;
 	ext3)
-	    echo "转换 EXT3 分区为 EXT4 分区:shell:/app/sdutil/convert4.sh" >> "$MENU_FILE" 
+	    echo "Convert ext3 to ext4:shell:/app/sdutil/convert4.sh" >> "$MENU_FILE" 
 	    ;;
     esac
 fi
 
-echo "保存诊断数据到 /sdcard/sdcard-info.txt:shell:/app/sdutil/diagnostics.sh" >> "$MENU_FILE"
+echo "Save diagnostics to /sdcard/sdcard-info.txt:shell:/app/sdutil/diagnostics.sh" >> "$MENU_FILE"
 
 echo "*:break:*" >> "$MENU_FILE"
-echo "                 分区 引导  Id 文件系统:label:*" >> "$MENU_FILE"
+echo "              Device Boot   Id System:label:*" >> "$MENU_FILE"
 echo "*:break:*" >> "$MENU_FILE"
 fdisk -l /dev/block/mmcblk0 | grep ^/dev/ | cut -c 1-28,63- | while read part
 do
@@ -55,6 +55,6 @@ do
 done
 echo "*:break:*" >> "$MENU_FILE"
 if [ ! -z "$ext" ] ; then
-    echo "EXT 分区是$ext:label:*" >> "$MENU_FILE"
+    echo "Ext partition appears to be $ext:label:*" >> "$MENU_FILE"
 fi
 

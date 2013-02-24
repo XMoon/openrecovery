@@ -5,11 +5,11 @@
 #really want to?
 BACKUP_NAME=`basename "$1"`
 
-USER_ACTION=`imenu "确认删除${BACKUP_NAME}?" 取消 确定`
+USER_ACTION=`imenu "Really delete ${BACKUP_NAME}?" No Yes`
 
 if [ $USER_ACTION -eq 2 ]; then
-	echo "正在删除${BACKUP_NAME}..."
+	echo "Deleting ${BACKUP_NAME}..."
 	rm -fr "$1"
 else
-	echo "未执行更改"
+	echo "Doing nothing."
 fi

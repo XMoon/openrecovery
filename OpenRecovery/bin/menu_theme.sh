@@ -2,8 +2,8 @@
 
 THEME_DIR=/sdcard/OpenRecovery/res.
 
-echo "主题设置" > "$MENU_FILE"
-echo "返回:menu:.." >> "$MENU_FILE"
+echo "Theme Settings" > "$MENU_FILE"
+echo "Go Back:menu:.." >> "$MENU_FILE"
 
 for THEME in "$THEME_DIR"*; do
 	#omit the default one

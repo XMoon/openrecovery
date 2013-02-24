@@ -3,8 +3,8 @@
 SCRIPTS_DIR=/sdcard/OpenRecovery/scripts
 
 #recreate the file
-echo "运行脚本" > "$MENU_FILE"
-echo "返回:menu:.." >> "$MENU_FILE"
+echo "Run Script" > "$MENU_FILE"
+echo "Go Back:menu:.." >> "$MENU_FILE"
 
 if [ -d $SCRIPTS_DIR ]
 then

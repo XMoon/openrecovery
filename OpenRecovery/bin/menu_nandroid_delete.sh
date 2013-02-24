@@ -1,7 +1,7 @@
 #!/sbin/bash
 
-echo "删除备份文件" > "$MENU_FILE"
-echo "返回:menu:.." >> "$MENU_FILE"
+echo "Nandroid Delete" > "$MENU_FILE"
+echo "Go Back:menu:.." >> "$MENU_FILE"
 
 NAND_DIR_ADB=/sdcard/nandroid/adbrecovery
 NAND_DIR_OPEN=/sdcard/nandroid/openrecovery
