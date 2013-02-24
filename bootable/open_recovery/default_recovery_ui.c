@@ -50,7 +50,7 @@ void doScreenshot() {
 	args[0] = tp;
 	args[1] = NULL;
 	
-	LOGII("截图保存在/sdcard/%s.bmp\n", tp);
+	LOGII("Screenshot was saved to /sdcard/%s.bmp\n", tp);
 	
 	pid_t pid = fork();
 	if (pid == 0)

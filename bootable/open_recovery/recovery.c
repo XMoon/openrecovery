@@ -168,11 +168,10 @@ static const char *TEMPORARY_LOG_FILE = "/tmp/open_recovery.log";
 static const char *FULL_PACKAGE_FILE = "SDCARD:OpenRecovery.zip";
 
 //yeah, CamelCase fail
-static char* BASE_MENU_TITLE[] = {"摩托罗拉 "OPEN_RECOVERY_PHONE" 恢复系统",
+static char* BASE_MENU_TITLE[] = {	"Motorola "OPEN_RECOVERY_PHONE" Open Recovery",
 				OPEN_RECOVERY_VERSION,
-				"作者: Skrilax_CZ, fentensoft",
-				"Mod: 89luca89, Azhad, Moon",
-				"汉化: Wudimobile",
+				"Created by Skrilax_CZ, fentensoft",
+				"Mod: 89luca89, Azhad, Moon, Wudimobile",
 				"",
 				OPEN_RECOVERY_NAVIG,
 				#ifdef OPEN_RECOVERY_NAVIG2
@@ -197,14 +196,14 @@ fopen_root_path(const char *root_path, const char *mode)
 {
 	if (ensure_root_path_mounted(root_path) != 0) 
 	{
-	  LOGE("未能挂载 %s\n", root_path);
+	  LOGE("Can't mount %s\n", root_path);
 	  return NULL;
 	}
 
 	char path[PATH_MAX] = "";
 	if (translate_root_path(root_path, path, sizeof(path)) == NULL) 
 	{
-	  LOGE("错误路径 %s\n", root_path);
+	  LOGE("Bad path %s\n", root_path);
 	  return NULL;
 	}
 
@@ -223,7 +222,7 @@ check_and_fclose(FILE *fp, const char *name)
 {
   fflush(fp);
   if (ferror(fp))
-  	LOGE("错误 %s\n(%s)\n", name, strerror(errno));
+  	LOGE("Error in %s\n(%s)\n", name, strerror(errno));
   fclose(fp);
 }
 
@@ -251,7 +250,7 @@ get_cmd_file_args(int *argc, char ***argv)
     }
 
     check_and_fclose(fp, COMMAND_FILE);
-    LOGI("数据来自 %s\n", COMMAND_FILE);
+    LOGI("Got arguments from %s\n", COMMAND_FILE);
   }
 }
 
@@ -263,11 +262,11 @@ get_args(int *argc, char ***argv)
   get_bootloader_message(&boot);  // this may fail, leaving a zeroed structure
 
   if (boot.command[0] != 0 && boot.command[0] != 255) 
-    LOGI("引导命令: %.*s\n", sizeof(boot.command), boot.command);
+    LOGI("Boot command: %.*s\n", sizeof(boot.command), boot.command);
   
 
   if (boot.status[0] != 0 && boot.status[0] != 255) 
-    LOGI("引导状态: %.*s\n", sizeof(boot.status), boot.status);
+    LOGI("Boot status: %.*s\n", sizeof(boot.status), boot.status);
   
 
   // --- if arguments weren't supplied, look in the bootloader control block
@@ -285,10 +284,10 @@ get_args(int *argc, char ***argv)
         	break;
         (*argv)[*argc] = strdup(arg);
       }
-      LOGI("从引导信息获取参数\n");
+      LOGI("Got arguments from boot message\n");
     } 
     else if (boot.recovery[0] != 0 && boot.recovery[0] != 255) 
-      LOGE("引导错误信息\n\"%.20s\"\n", boot.recovery);
+      LOGE("Bad boot message\n\"%.20s\"\n", boot.recovery);
     
   }
 
@@ -330,7 +329,7 @@ finish_recovery(const char *send_intent)
     if (send_intent != NULL) {
         FILE *fp = fopen_root_path(INTENT_FILE, "w");
         if (fp == NULL) {
-            LOGE("无法打开 %s\n", INTENT_FILE);
+            LOGE("Can't open %s\n", INTENT_FILE);
         } else {
             fputs(send_intent, fp);
             check_and_fclose(fp, INTENT_FILE);
@@ -340,11 +339,11 @@ finish_recovery(const char *send_intent)
     // Copy logs to cache so the system can find out what happened.
     FILE *log = fopen_root_path(LOG_FILE, "a");
     if (log == NULL) {
-        LOGE("无法打开 %s\n", LOG_FILE);
+        LOGE("Can't open %s\n", LOG_FILE);
     } else {
         FILE *tmplog = fopen(TEMPORARY_LOG_FILE, "r");
         if (tmplog == NULL) {
-            LOGE("无法打开 %s\n", TEMPORARY_LOG_FILE);
+            LOGE("Can't open %s\n", TEMPORARY_LOG_FILE);
         } else {
             static long tmplog_offset = 0;
             fseek(tmplog, tmplog_offset, SEEK_SET);  // Since last write
@@ -368,7 +367,7 @@ finish_recovery(const char *send_intent)
     if (ensure_root_path_mounted(COMMAND_FILE) != 0 ||
         translate_root_path(COMMAND_FILE, path, sizeof(path)) == NULL ||
         (unlink(path) && errno != ENOENT)) {
-        LOGW("无法取消链接 %s\n", COMMAND_FILE);
+        LOGW("Can't unlink %s\n", COMMAND_FILE);
     }
     sync();  // For good measure.
 }
@@ -378,7 +377,7 @@ erase_root(const char *root)
 {
   ui_set_background(BACKGROUND_ICON_INSTALLING);
   ui_show_indeterminate_progress();
-  ui_print("正在清除 %s...\n", root);
+  ui_print("Formatting %s...\n", root);
   return format_root_device(root);
 }
 
@@ -501,13 +500,13 @@ wipe_data(int confirm)
 {
   if (confirm) 
   {
-    char* headers[] = { "确定要清除全部数据?",
-                        "这将无法恢复",
+    char* headers[] = { "Confirm wipe of all user data?",
+                        "  THIS CAN NOT BE UNDONE.",
                         "",
                         NULL };
 
-    char* items[] = { "取消",
-                      "确定",   // [7]
+    char* items[] = { "No",
+                      "Yes -- delete all user data",   // [7]
                       NULL };
                       
     int chosen_item = show_interactive_menu(headers, items);
@@ -517,12 +516,12 @@ wipe_data(int confirm)
   }
 
 	ui_led_blink(1);
-  ui_print("\n-- 正在清除数据...\n");
+  ui_print("\n-- Wiping data...\n");
   device_wipe_data();
   erase_root("DATA:");
   erase_root("CACHE:");
   ensure_common_roots_mounted();
-  ui_print("完成.\n");
+  ui_print("Data wipe complete.\n");
  	ui_led_toggle(0);
 }
 
@@ -586,7 +585,7 @@ create_menu(const char *fname, const char *shellcmd)
 			NULL 
 		};
 		
-		fprintf(stderr, "正在运行菜单脚本 %s.\n", shellcmd);		
+		fprintf(stderr, "Running menu script %s.\n", shellcmd);		
 		sprintf(menu_file_var, "MENU_FILE="CUSTOM_MENU_PATH"/%s", fname);
 		run_shell_script(shellcmd, 0, extra_env_vars);
 	}	
@@ -596,12 +595,12 @@ create_menu(const char *fname, const char *shellcmd)
 
 	if(fp == NULL)
 	{
-		fprintf(stderr, "无法打开 %s.\n", buf);
-		LOGE("无法打开菜单 %s.\n", fname);
+		fprintf(stderr, "Unable to open %s.\n", buf);
+		LOGE("Failed to open the menu %s.\n", fname);
 		return -1;
 	}
 	else
-		fprintf(stderr, "正在打开 %s.\n", buf);
+		fprintf(stderr, "Opening %s.\n", buf);
 		
 	delete_menu();	
 
@@ -626,7 +625,7 @@ create_menu(const char *fname, const char *shellcmd)
 			MENU_HEADERS[2] = NULL;
 			strcpy(MENU_HEADERS[0], buf);
 			strcpy(MENU_HEADERS[1], "");
-			fprintf(stderr, "菜单标题: %s.\n", MENU_HEADERS[0]);
+			fprintf(stderr, "Menu Title: %s.\n", MENU_HEADERS[0]);
 			readTitle = 0;
 			continue;
 		}
@@ -647,7 +646,7 @@ create_menu(const char *fname, const char *shellcmd)
 			free(MENU_ITEMS[idx]);
 			MENU_ITEMS[idx] = NULL;
 			
-			fprintf(stderr, "无效行: %s", buf);
+			fprintf(stderr, "Invalid line: %s", buf);
 			continue;
 		}
 		
@@ -663,7 +662,7 @@ create_menu(const char *fname, const char *shellcmd)
 			free(MENU_ITEMS_ACTION[idx]);
 			MENU_ITEMS_ACTION[idx] = NULL;
 			
-			fprintf(stderr, "无效行: %s", buf);
+			fprintf(stderr, "Invalid line: %s", buf);
 			continue;
 		}
 
@@ -891,7 +890,7 @@ prompt_and_wait()
 		    && chosen_item != ITEM_NEW_MENU_SCRIPTED)
 			hide_menu_selection();
 
-		fprintf(stderr, "菜单: %d, %d, %s\n", menu_item, chosen_item, MENU_ITEMS_TARGET[menu_item]);
+		fprintf(stderr, "Menu: %d, %d, %s\n", menu_item, chosen_item, MENU_ITEMS_TARGET[menu_item]);
 
     switch (chosen_item) {
     	case ITEM_REBOOT:
@@ -907,12 +906,12 @@ prompt_and_wait()
         break;
 
       case ITEM_WIPE_CACHE:
-        ui_print("\n-- 正在清除缓存(CACHE)...\n");
+        ui_print("\n-- Wiping cache...\n");
 				ui_led_blink(1);
         erase_root("CACHE:");
         ensure_common_roots_mounted();
 				ui_led_toggle(0);
-        ui_print("完成.\n");
+        ui_print("Cache wipe complete.\n");
         if (!ui_text_visible()) 
         	return;
         ui_set_background(BACKGROUND_ICON_ERROR);
@@ -925,17 +924,17 @@ prompt_and_wait()
       	override_initial_selection=override_initial_selection; 
       
       	//confirm it	
-      	char* confirm_headers[] = { "确定要安装此升级包?",
+      	char* confirm_headers[] = { "Confirm installing update package?",
       															 MENU_ITEMS[menu_item],
       															 "",
       															 NULL
       														};
-      	char* confirm_items[] = { "确定", "取消", NULL };
+      	char* confirm_items[] = { "Yes", "No", NULL };
       	int confirm_item = show_interactive_menu(confirm_headers, confirm_items);
       	
       	if (confirm_item == 1) //YES!
       	{      	
-		      ui_print("\n-- 从SD卡安装升级包...\n");
+		      ui_print("\n-- Install from sdcard...\n");
 		      ui_led_blink(1);
 		      ensure_common_roots_unmounted();
 		      ensure_root_path_mounted("SDCARD:");
@@ -946,7 +945,7 @@ prompt_and_wait()
 		      if (status != INSTALL_SUCCESS) 
 		      {
 						ui_set_background(BACKGROUND_ICON_ERROR);
-						ui_print("安装出错. \n");
+						ui_print("Installation aborted.\n");
 		      } 
 		      else if (!ui_text_visible()) 
 	          return;  // reboot if logs aren't visible
@@ -955,12 +954,13 @@ prompt_and_wait()
 		        if (firmware_update_pending()) 
 		        {
 	        		ui_set_background(BACKGROUND_ICON_ERROR);
-	            ui_print("\n请重启手机以完成安装. \n");
+	            ui_print("\nReboot via menu to complete\n"
+	                     "installation.\n");
 		        } 
 		        else 
 		        {
 	        		ui_set_background(BACKGROUND_ICON_ERROR);
-	            ui_print("\n从SD卡安装成功. \n");
+	            ui_print("\nInstall from sdcard complete.\n");
 		        }
 		      }
 		      
@@ -974,7 +974,7 @@ prompt_and_wait()
  				break; 
 
       case ITEM_SHELL_SCRIPT:
-        ui_print("\n-- 运行脚本 --\n");
+        ui_print("\n-- Shell script...\n");
         ui_print("%s\n", MENU_ITEMS_TARGET[menu_item]);
 				ui_led_blink(1);
 				ensure_common_roots_mounted();
@@ -985,7 +985,7 @@ prompt_and_wait()
 				headers = prepend_title(MENU_HEADERS, &title_length);
 				
 				ui_led_toggle(0);
-        ui_print("完成. \n");
+        ui_print("Done.\n");
 				
 				override_initial_selection = menu_item;											
  				break; 
@@ -996,7 +996,7 @@ prompt_and_wait()
 				{
 					int tag_fd = creat(MENU_ITEMS_TARGET[menu_item], 0644);
 					if (tag_fd < 0)
-						LOGE("无法设置标签.\n");
+						LOGE("Failed to set the tag.\n");
 					else
 					{
 						MENU_ITEMS_TAG[menu_item] = 0x01;
@@ -1139,12 +1139,12 @@ prompt_and_wait()
 				break;
 			
 			case ITEM_CONSOLE:
-				LOGE("此设备不支持控制中心.\n");
+				LOGE("This phone doesn't support console.\n");
 				override_initial_selection = menu_item;											
  				break; 
 			
 			case ITEM_ERROR:
-				LOGE("未知命令: %s.\n", MENU_ITEMS_ACTION[menu_item]);
+				LOGE("Unknown command: %s.\n", MENU_ITEMS_ACTION[menu_item]);
 				break;
     }
   }
@@ -1161,7 +1161,7 @@ main(int argc, char **argv)
 {
   if (getppid() != 1)
   {
-  	fprintf(stderr, "主进程需要初始化.\n"); 
+  	fprintf(stderr, "Parent process must be init.\n"); 
 		return EXIT_FAILURE;
   }
   
@@ -1170,7 +1170,7 @@ main(int argc, char **argv)
 	// If these fail, there's not really anywhere to complain...
 	freopen(TEMPORARY_LOG_FILE, "a", stdout); setbuf(stdout, NULL);
 	freopen(TEMPORARY_LOG_FILE, "a", stderr); setbuf(stderr, NULL);
-	fprintf(stderr, "在 %s 启动恢复系统", ctime(&start));
+	fprintf(stderr, "Starting Open Recovery on %s", ctime(&start));
 
 	//menu title
 	//lite - just the base
@@ -1259,14 +1259,14 @@ main(int argc, char **argv)
       case 'w': wipe_data = wipe_cache = 1; break;
       case 'c': wipe_cache = 1; break;
       case '?':
-        LOGE("无效命令参数\n");
+        LOGE("Invalid command argument\n");
         continue;
     }
   }
 
 	device_recovery_start();
 
-  fprintf(stderr, "命令:");
+  fprintf(stderr, "Command:");
   for (arg = 0; arg < argc; arg++) 
     fprintf(stderr, " \"%s\"", argv[arg]);
   
@@ -1281,7 +1281,7 @@ main(int argc, char **argv)
   {
     status = install_package(update_package);
     if (status != INSTALL_SUCCESS) 
-    	ui_print("已停止安装.\n");
+    	ui_print("Installation aborted.\n");
     
     char package_path[PATH_MAX] = "";
     if (!ensure_root_path_mounted(update_package) &&
@@ -1297,14 +1297,14 @@ main(int argc, char **argv)
     if (wipe_cache && erase_root("CACHE:")) 
     	status = INSTALL_ERROR;
     if (status != INSTALL_SUCCESS)
-    	ui_print("出错.\n");
+    	ui_print("Data wipe failed.\n");
   } 
   else if (wipe_cache) 
   {
     if (wipe_cache && erase_root("CACHE:")) 
     	status = INSTALL_ERROR;
     if (status != INSTALL_SUCCESS) 
-    	ui_print("出错.\n");
+    	ui_print("Cache wipe failed.\n");
   } 
   else 
     status = INSTALL_ERROR;  // No command specified
@@ -1340,7 +1340,7 @@ main(int argc, char **argv)
   // Otherwise, get ready to boot the main system...
   finish_recovery(send_intent);
 
-  ui_print("正在重新启动...\n");
+  ui_print("Rebooting...\n");
   sync();
   ensure_common_roots_unmounted();
   reboot(RB_AUTOBOOT);

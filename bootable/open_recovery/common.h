@@ -52,8 +52,8 @@
 
 #define OPEN_RECOVERY_PHONE "XT701"
 #define OPEN_RECOVERY_PHONE_SWITCH "STCU"
-#define OPEN_RECOVERY_NAVIG "音量上/下键移动光标,相机键选择"
-#define OPEN_RECOVERY_NAVIG2 "媒体键截图"
+#define OPEN_RECOVERY_NAVIG "VolUp/VolDn to move focus; Camera to select."
+#define OPEN_RECOVERY_NAVIG2 "Media to screenshot"
 #define PHONE_SHELL "/sbin/bash"
 #define OPEN_RECOVERY_HAVE_CONSOLE 0
 #define HAVE_CUST 0
@@ -93,7 +93,7 @@
 
 #else
 
-#define OPEN_RECOVERY_VERSION "版本 "OPEN_RECOVERY_VERSION_BASE
+#define OPEN_RECOVERY_VERSION "Version "OPEN_RECOVERY_VERSION_BASE
 
 #endif
 
@@ -104,8 +104,8 @@
 #define MOD_AUTHOR_PROP "ro.or.mod.author"
 #define MOD_VERSION_PROP "ro.or.mod.version"
 
-#define MOD_AUTHOR_BASE "Mod作者 %s"
-#define MOD_VERSION_BASE "Mod版本 %s"
+#define MOD_AUTHOR_BASE "Mod Created by %s"
+#define MOD_VERSION_BASE "Mod Version %s"
 
 // Initialize the graphics system.
 void ui_init();
