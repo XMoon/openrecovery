@@ -165,7 +165,7 @@ static const char *TEMPORARY_LOG_FILE = "/tmp/open_recovery.log";
 #endif
 
 
-static const char *FULL_PACKAGE_FILE = "SDCARD:OpenRecovery.zip";
+static const char *FULL_PACKAGE_FILE = "CDROM:OpenRecovery.zip";
 
 //yeah, CamelCase fail
 static char* BASE_MENU_TITLE[] = {"摩托罗拉 "OPEN_RECOVERY_PHONE" 恢复系统",

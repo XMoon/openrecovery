@@ -47,6 +47,7 @@ static RootInfo g_roots[] = {
     { "BOOT:", g_mtd_device, NULL, "boot", NULL, g_raw },
     { "CACHE:", g_mtd_device, NULL, "cache", "/cache", "yaffs2" },
     { "DATA:", g_mtd_device, NULL, "userdata", "/data", "yaffs2" },
+    { "CDROM:", g_mtd_device, NULL, "cdrom", "/or", "yaffs2" },
     { "MISC:", g_mtd_device, NULL, "misc", NULL, g_raw },
     { "PACKAGE:", NULL, NULL, NULL, NULL, g_package_file },
     { "RECOVERY:", g_mtd_device, NULL, "recovery", "/", g_raw },
