@@ -17,6 +17,6 @@
 
 MTDBLOCKSYSTEM    /system         yaffs2          defaults        0 0
 MTDBLOCKDATA      /data           yaffs2          defaults        0 0
-MTDBLOCKCDROM     /cdrom          yaffs2          defaults        0 0
+MTDBLOCKCDROM     /or          yaffs2          defaults        0 0
 MTDBLOCKCACHE     /cache          yaffs2          defaults        0 0
 /dev/block/mmcblk0p1          /sdcard         auto            defaults        0 0

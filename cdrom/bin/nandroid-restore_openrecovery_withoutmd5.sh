@@ -232,7 +232,7 @@ done
 # Restore the yaffs2 filesystem partitions
 #===============================================================================
 
-for image in system data cache cdrom; do
+for image in system data cache or; do
 	if [ ! -f $image.img* ]; then
 		echo "${image}: 无法执行恢复."
 		continue
@@ -260,7 +260,7 @@ for image in system data cache cdrom; do
 			fi
 			;;
 	
-		cdrom)
+		or)
 			if [ $REST_CDROM -eq 0 ]; then
 				echo "CD-Rom: 已跳过."
 				continue

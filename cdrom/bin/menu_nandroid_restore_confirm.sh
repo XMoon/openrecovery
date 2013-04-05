@@ -17,7 +17,7 @@ echo "分区:break:*" >> "$MENU_FILE"
 CWD=$PWD
 cd "$1"
 
-for image in system data cache cdrom boot lbl logo ext; do
+for image in system data cache or boot lbl logo ext; do
 	if [ `ls $image* 2>/dev/null | wc -l` == 0 ]; then
   	continue
   fi
@@ -32,7 +32,7 @@ for image in system data cache cdrom boot lbl logo ext; do
     cache)
 				echo "缓存(cache):tag:nand_rest_cache" >> "$MENU_FILE"
 			;;   
-    cdrom)
+    or)
 				echo "CD-Rom:tag:nand_rest_cdrom" >> "$MENU_FILE"
 			;;   
     boot)

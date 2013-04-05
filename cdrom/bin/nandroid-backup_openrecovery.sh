@@ -200,8 +200,8 @@ if [ $BKP_CACHE -eq 1 ]; then
 fi
 
 if [ $BKP_CDROM -eq 1 ]; then
-	umount /cdrom 2> /dev/null
-	mount /cdrom || FAIL=1
+	umount /or 2> /dev/null
+	mount /or || FAIL=1
 	
 	if [ $FAIL -eq 1 ]; then
 		BKP_CDROM=0
@@ -305,7 +305,7 @@ done
 # Backup the yaffs2 filesystem partitions
 #===============================================================================
 
-for image in system data cache cdrom; do
+for image in system data cache or; do
 	case $image in
 		system)
 			if [ $BKP_SYSTEM -eq 0 ]; then
@@ -328,7 +328,7 @@ for image in system data cache cdrom; do
 			fi
 			;;
 		
-		cdrom)
+		or)
 			if [ $BKP_CDROM -eq 0 ]; then
 				echo "CD-Rom: 已跳过."
 				continue

@@ -31,11 +31,6 @@ fi
 #basic initialization
 #===============================================================================
 
-#dirs
-
-mkdir /cdrom
-chmod 0755 /cdrom
-
 #fstab
 cp -f "/or/etc/fstab.$1" ${ROOT}etc/fstab
 chmod 0644 ${ROOT}etc/fstab
@@ -218,6 +213,12 @@ cp -fR /or/menu/ $ROOT
 mkdir ${ROOT}tags
 chmod 0644 ${ROOT}tags
 cp -fR /or/tags/ $ROOT
+
+#sdcard
+
+if [ ! -d "/sdcard/OpenRecovery/updates"];then
+	mkdir /sdcard/OpenRecovery/updates
+fi
 
 
 #Launch Open Recovery
